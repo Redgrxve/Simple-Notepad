@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "filedialog.h"
+#include "tabbuttonwidget.h"
 #include <QtWidgets>
 #include <QFile>
 #include <QTextStream>
@@ -10,6 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    TabButtonWidget* nbutton = new TabButtonWidget(this);
+    ui->tabWidget->tabBar()->setTabButton(0, QTabBar::RightSide, nbutton);
 }
 
 MainWindow::~MainWindow()

@@ -6,5 +6,7 @@
         <file>resources/icons/new.png</file>
         <file>resources/icons/save-as.png</file>
         <file>resources/icons/text-editor.png</file>
+        <file>resources/icons/close.png</file>
+        <file>resources/icons/plus.png</file>
     </qresource>
 </RCC>
