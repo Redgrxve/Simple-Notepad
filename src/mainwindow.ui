@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/icons/res/icons/text-editor.png</normaloff>:/icons/res/icons/text-editor.png</iconset>
+    <normaloff>:/icons/resources/icons/text-editor.png</normaloff>:/icons/resources/icons/text-editor.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -67,7 +67,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/res/icons/folder.png</normaloff>:/icons/res/icons/folder.png</iconset>
+     <normaloff>:/icons/resources/icons/folder.png</normaloff>:/icons/resources/icons/folder.png</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -82,7 +82,7 @@
   <action name="actionSave">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/res/icons/diskette.png</normaloff>:/icons/res/icons/diskette.png</iconset>
+     <normaloff>:/icons/resources/icons/diskette.png</normaloff>:/icons/resources/icons/diskette.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -97,7 +97,7 @@
   <action name="actionSave_As">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/icons/res/icons/save-as.png</normaloff>:/icons/res/icons/save-as.png</iconset>
+     <normaloff>:/icons/resources/icons/save-as.png</normaloff>:/icons/resources/icons/save-as.png</iconset>
    </property>
    <property name="text">
     <string>Save As...</string>
