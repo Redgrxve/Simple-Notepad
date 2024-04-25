@@ -17,6 +17,32 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::onOpenTriggered()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, "Select file", QDir::homePath());
+
+    if (!filePath.isEmpty())
+        openFile(filePath);
+}
+
+void MainWindow::onSaveTriggered()
+{
+    if (currentFilePath.isEmpty()) {
+        onSaveAsTriggered();
+        return;
+    }
+
+    saveFile(currentFilePath);
+}
+
+void MainWindow::onSaveAsTriggered()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, "Select file", QDir::homePath());
+
+    if (!filePath.isEmpty())
+        saveFile(filePath);
+}
+
 void MainWindow::openFile(const QString &filePath)
 {
     QFile mFile(filePath);
@@ -48,28 +74,4 @@ void MainWindow::saveFile(const QString &filePath)
     stream << ui->textEdit->toPlainText();
     mFile.close();
     ui->statusbar->showMessage("The file saved: " + filePath);
-}
-
-void MainWindow::onOpenTriggered()
-{
-    FileDialog* window = new FileDialog(this);
-    connect(window, SIGNAL(filePath(const QString&)), this, SLOT(openFile(const QString&)));
-    window->exec();
-}
-
-void MainWindow::onSaveTriggered()
-{
-    if (currentFilePath.isEmpty()) {
-        onSaveAsTriggered();
-        return;
-    }
-
-    saveFile(currentFilePath);
-}
-
-void MainWindow::onSaveAsTriggered()
-{
-    FileDialog* window = new FileDialog(this);
-    connect(window, SIGNAL(filePath(const QString&)), this, SLOT(saveFile(const QString&)));
-    window->exec();
 }
