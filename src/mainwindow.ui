@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>448</width>
-    <height>284</height>
+    <width>676</width>
+    <height>522</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -98,7 +98,7 @@ QTextEdit {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>448</width>
+     <width>676</width>
      <height>21</height>
     </rect>
    </property>
@@ -113,7 +113,13 @@ QTextEdit {
     <addaction name="actionSave"/>
     <addaction name="actionSave_As"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
