@@ -19,7 +19,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::onOpenTriggered()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "Select file", QDir::homePath());
+    QString filePath = QFileDialog::getOpenFileName(
+        this,
+        tr("Select file"),
+        QDir::homePath(),
+        tr("Text files (*.txt *.bat *.cpp *.vbs *.pro);;All files (*.*);;*.txt;;*.bat;;*.cpp;;*.vbs;;*pro")
+    );
 
     if (!filePath.isEmpty())
         openFile(filePath);
@@ -37,7 +42,12 @@ void MainWindow::onSaveTriggered()
 
 void MainWindow::onSaveAsTriggered()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, "Select file", QDir::homePath());
+    QString filePath = QFileDialog::getSaveFileName(
+        this,
+        "Select file",
+        QDir::homePath(),
+        "*.txt;;*.bat;;*.cpp;;*.vbs;;*.pro"
+    );
 
     if (!filePath.isEmpty())
         saveFile(filePath);
