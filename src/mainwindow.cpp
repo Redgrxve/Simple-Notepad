@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "tabbuttonwidget.h"
 #include "texteditwidget.h"
 #include <QtWidgets>
 #include <QFile>
@@ -11,11 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    TabButtonWidget* tabButton = new TabButtonWidget(ui->starterTab);
-    ui->tabWidget->tabBar()->setTabButton(0, QTabBar::RightSide, tabButton);
-    connect(tabButton, SIGNAL(addTabClicked()), this, SLOT(onAddTabClicked()));
-    connect(tabButton, SIGNAL(closeTabClicked()), this, SLOT(onCloseTabClicked()));
 }
 
 MainWindow::~MainWindow()
@@ -108,25 +102,3 @@ void MainWindow::onSaveAsTriggered()
         saveFile(filePath);
 }
 
-void MainWindow::onAddTabClicked()
-{
-    TextEditWidget* newTab = new TextEditWidget(this);
-    int newTabIndex = ui->tabWidget->addTab(newTab, "New Tab");
-
-    TabButtonWidget* tabButton = new TabButtonWidget(newTab);
-    ui->tabWidget->tabBar()->setTabButton(newTabIndex, QTabBar::RightSide, tabButton);
-    connect(tabButton, SIGNAL(addTabClicked()), this, SLOT(onAddTabClicked()));
-    connect(tabButton, SIGNAL(closeTabClicked()), this, SLOT(onCloseTabClicked()));
-
-    ui->tabWidget->setCurrentIndex(newTabIndex);
-}
-
-void MainWindow::onCloseTabClicked()
-{
-    if (ui->tabWidget->count() <= 1) return;
-
-    auto closeButton = qobject_cast<TabButtonWidget*>(sender());
-    if (!closeButton) return;
-
-    ui->tabWidget->removeTab(ui->tabWidget->tabBar()->tabAt(closeButton->pos()));
-}

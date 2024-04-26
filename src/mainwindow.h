@@ -30,8 +30,5 @@ private slots:
     void onOpenTriggered();
     void onSaveTriggered();
     void onSaveAsTriggered();
-
-    void onAddTabClicked();
-    void onCloseTabClicked();
 };
 #endif // MAINWINDOW_H

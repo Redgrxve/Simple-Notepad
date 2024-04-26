@@ -16,6 +16,16 @@ TabButtonWidget::~TabButtonWidget()
     delete ui;
 }
 
+void TabButtonWidget::setVisibleAddButton(bool visible) const
+{
+    ui->addTabButton->setVisible(visible);
+}
+
+void TabButtonWidget::setVisibleCloseButton(bool visible) const
+{
+    ui->closeTabButton->setVisible(visible);
+}
+
 void TabButtonWidget::onAddTabClicked()
 {
     emit addTabClicked();
@@ -24,7 +34,7 @@ void TabButtonWidget::onAddTabClicked()
 
 void TabButtonWidget::onCloseTabClicked()
 {
-    emit closeTabClicked();
+    emit closeTabClicked(this);
 }
 
 

@@ -33,10 +33,6 @@ QToolBar {
 	padding: 5px;
 }
 
-QToolButton {
-
-}
-
 QToolButton:hover {
 	background: #3498db;
 	border-radius: 5px;
@@ -97,9 +93,9 @@ QTextEdit {
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="TabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>-1</number>
       </property>
       <property name="usesScrollButtons">
        <bool>true</bool>
@@ -113,11 +109,6 @@ QTextEdit {
       <property name="movable">
        <bool>true</bool>
       </property>
-      <widget class="TextEditWidget" name="starterTab">
-       <attribute name="title">
-        <string>Страница</string>
-       </attribute>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -231,9 +222,9 @@ QTextEdit {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TextEditWidget</class>
-   <extends>QWidget</extends>
-   <header>texteditwidget.h</header>
+   <class>TabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>tabwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

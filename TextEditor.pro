@@ -29,6 +29,7 @@ FORMS += \
     src/filedialog.ui \
     src/mainwindow.ui \
     src/tabbuttonwidget.ui \
+    src/tabwidget.ui \
     src/texteditwidget.ui
 
 # Default rules for deployment.
