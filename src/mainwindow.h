@@ -19,15 +19,19 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
+private:
+    Ui::MainWindow *ui;
+    QString currentFilePath;
+
     void openFile(const QString& filePath);
     void saveFile(const QString& filePath);
+
+private slots:
     void onOpenTriggered();
     void onSaveTriggered();
     void onSaveAsTriggered();
 
-private:
-    Ui::MainWindow *ui;
-    QString currentFilePath;
+    void onAddTabClicked();
+    void onCloseTabClicked();
 };
 #endif // MAINWINDOW_H

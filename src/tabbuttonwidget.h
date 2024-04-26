@@ -17,6 +17,14 @@ public:
 
 private:
     Ui::TabButtonWidget *ui;
+
+signals:
+    void addTabClicked();
+    void closeTabClicked();
+
+private slots:
+    void onAddTabClicked();
+    void onCloseTabClicked();
 };
 
 #endif // TABBUTTONWIDGET_H

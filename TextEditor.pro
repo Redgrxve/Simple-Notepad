@@ -14,17 +14,22 @@ SOURCES += \
     src/filedialog.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/tabbuttonwidget.cpp
+    src/tabbuttonwidget.cpp \
+    src/tabwidget.cpp \
+    src/texteditwidget.cpp
 
 HEADERS += \
     src/filedialog.h \
     src/mainwindow.h \
-    src/tabbuttonwidget.h
+    src/tabbuttonwidget.h \
+    src/tabwidget.h \
+    src/texteditwidget.h
 
 FORMS += \
     src/filedialog.ui \
     src/mainwindow.ui \
-    src/tabbuttonwidget.ui
+    src/tabbuttonwidget.ui \
+    src/texteditwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

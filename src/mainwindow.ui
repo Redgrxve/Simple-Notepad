@@ -27,16 +27,34 @@
 }
 
 QToolBar {
-	background: #bdc3c7;
+	background: transparent;
 	border: none;
-	spacing: 5px;
+	spacing: 7px;
 	padding: 5px;
 }
 
+QToolButton {
+
+}
+
+QToolButton:hover {
+	background: #3498db;
+	border-radius: 5px;
+}
+
 QMenuBar {
-	background: #bdc3c7;
+	background:  transparent;
 	font-weight: bold;
 	color: black;
+}
+
+QMenuBar::item:selected {
+	background: #3498db;
+	border-radius: 5px;
+}
+
+QMenuBar::item:pressed {
+	border: 1px solid #2980b9;
 }
 
 QMenu {
@@ -45,10 +63,13 @@ QMenu {
 	border: 2px solid black;
 	border-radius: 5px;
 	font-weight: bold;
+	padding: 5px 0px 5px 5px ;
 }
 
-QAction {
-	background: #ecf0f1;
+QMenu::item:selected {
+	background: #3498db;
+	border-radius: 3px;
+	border: 1px solid #2980b9;
 }
 
 QTextEdit {
@@ -81,45 +102,21 @@ QTextEdit {
        <number>0</number>
       </property>
       <property name="usesScrollButtons">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="documentMode">
        <bool>true</bool>
       </property>
       <property name="tabsClosable">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="movable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="starterTab">
+      <widget class="TextEditWidget" name="starterTab">
        <attribute name="title">
-        <string>New File</string>
+        <string>Страница</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QTextEdit" name="textEdit">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </widget>
     </item>
@@ -140,6 +137,9 @@ QTextEdit {
     </property>
     <property name="title">
      <string>File</string>
+    </property>
+    <property name="separatorsCollapsible">
+     <bool>false</bool>
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
@@ -229,6 +229,14 @@ QTextEdit {
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TextEditWidget</class>
+   <extends>QWidget</extends>
+   <header>texteditwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>
