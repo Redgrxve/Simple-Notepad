@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "texteditwidget.h"
+#include "utils.h"
 #include <QtWidgets>
 #include <QFile>
 #include <QTextStream>
@@ -10,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    connect(ui->tabWidget, SIGNAL(closeTabClicked(int)), this, SLOT(onTabClose(int)));
 }
 
 MainWindow::~MainWindow()
@@ -40,6 +43,7 @@ void MainWindow::openFile(const QString &filePath)
     textEditWidget->setText(buffer);
     currentFilePath = filePath;
     ui->statusbar->showMessage("The file readed: " + filePath);
+    ui->tabWidget->setCurrentTabText(QFileInfo(filePath).fileName());
 }
 
 void MainWindow::saveFile(const QString &filePath)
@@ -66,21 +70,28 @@ void MainWindow::saveFile(const QString &filePath)
     ui->statusbar->showMessage("The file saved: " + filePath);
 }
 
+void MainWindow::onNewTriggered()
+{
+    QString filePath = Utils::getOpenFileName(this);
+    if (filePath.isEmpty()) return;
+
+    ui->tabWidget->addTabWithButton("");
+    openFile(filePath);
+    filePaths.push_back(filePath);
+}
+
 void MainWindow::onOpenTriggered()
 {
-    QString filePath = QFileDialog::getOpenFileName(
-        this,
-        tr("Select file"),
-        QDir::homePath(),
-        tr("Text files (*.txt *.bat *.cpp *.vbs *.pro);;All files (*.*);;*.txt;;*.bat;;*.cpp;;*.vbs;;*pro")
-    );
+    QString filePath = Utils::getOpenFileName(this);
+    if (filePath.isEmpty()) return;
 
-    if (!filePath.isEmpty())
-        openFile(filePath);
+    openFile(filePath);
+    filePaths[ui->tabWidget->currentIndex()] = filePath;
 }
 
 void MainWindow::onSaveTriggered()
 {
+    QString currentFilePath = filePaths[ui->tabWidget->currentIndex()];
     if (currentFilePath.isEmpty()) {
         onSaveAsTriggered();
         return;
@@ -91,14 +102,16 @@ void MainWindow::onSaveTriggered()
 
 void MainWindow::onSaveAsTriggered()
 {
-    QString filePath = QFileDialog::getSaveFileName(
-        this,
-        "Select file",
-        QDir::homePath(),
-        "*.txt;;*.bat;;*.cpp;;*.vbs;;*.pro"
-    );
+    QString filePath = Utils::getSaveFileName(this);
+    if (filePath.isEmpty()) return;
 
-    if (!filePath.isEmpty())
-        saveFile(filePath);
+    saveFile(filePath);
+    openFile(filePath);
+    filePaths[ui->tabWidget->currentIndex()] = filePath;
+}
+
+void MainWindow::onTabClose(int tabIndex)
+{
+    filePaths.removeAt(tabIndex);
 }
 

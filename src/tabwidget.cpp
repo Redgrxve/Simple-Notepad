@@ -4,7 +4,7 @@
 #include "ui_tabwidget.h"
 #include <QTabBar>
 
-TabWidget::TabWidget(QWidget *parent)
+TabWidget::TabWidget(QWidget* parent)
     : QTabWidget(parent)
     , ui(new Ui::TabWidget)
 {
@@ -12,7 +12,6 @@ TabWidget::TabWidget(QWidget *parent)
 
     TabButtonWidget* tabButton = new TabButtonWidget(ui->starterTab);
     tabBar()->setTabButton(0, QTabBar::RightSide, tabButton);
-    connect(tabButton, SIGNAL(addTabClicked()), this, SLOT(onAddTabClicked()));
     connect(tabButton, SIGNAL(closeTabClicked(TabButtonWidget*)), this, SLOT(onCloseTabClicked(TabButtonWidget*)));
 }
 
@@ -21,28 +20,27 @@ TabWidget::~TabWidget()
     delete ui;
 }
 
-void TabWidget::onAddTabClicked()
+int TabWidget::addTabWithButton(const QString& tabText)
 {
     TextEditWidget* newTab = new TextEditWidget(this);
-    int newTabIndex = addTab(newTab, "New file");
-
     TabButtonWidget* tabButton = new TabButtonWidget(newTab);
+    int newTabIndex = addTab(newTab, tabText.isEmpty() ? "New file" : tabText);
     tabBar()->setTabButton(newTabIndex, QTabBar::RightSide, tabButton);
-    connect(tabButton, SIGNAL(addTabClicked()), this, SLOT(onAddTabClicked()));
     connect(tabButton, SIGNAL(closeTabClicked(TabButtonWidget*)), this, SLOT(onCloseTabClicked(TabButtonWidget*)));
-
     setCurrentIndex(newTabIndex);
+    return newTabIndex;
+}
+
+void TabWidget::setCurrentTabText(const QString& text)
+{
+    setTabText(currentIndex(), text);
 }
 
 void TabWidget::onCloseTabClicked(TabButtonWidget* sender)
 {
     if (count() <= 1) return;
 
-    removeTab(tabBar()->tabAt(sender->pos()));
-
-    if (count() == 1) {
-        auto tabButtonWidget = qobject_cast<TabButtonWidget*>(tabBar()->tabButton(0, QTabBar::RightSide));
-        if (tabButtonWidget)
-            tabButtonWidget->setVisibleAddButton(true);
-    }
+    int tabIndex = tabBar()->tabAt(sender->pos());
+    removeTab(tabIndex);
+    emit closeTabClicked(tabIndex);
 }

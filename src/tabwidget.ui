@@ -6,12 +6,58 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>502</width>
+    <height>389</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>TabWidget</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QTabWidget::tab-bar {
+	left: 8px;
+}
+
+QTabBar::tab {
+	border-top: 2px solid black;
+	border-left: 2px solid black;
+	border-right: 2px solid black;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	padding: 0 10px;
+	margin-right: 3px;
+}
+
+QTabBar::tab:last {
+	margin-right: 0;
+}
+
+QTabBar::tab:!selected {
+	margin-top: 2px;
+}
+
+QTabBar::tab:selected {
+	background: #95a5a6;
+	font-weight: bold;
+	margin-left: -7px;
+    margin-right: -7px;
+}
+
+QTabBar::tab:first:selected {
+	margin-left: 0px;
+}
+
+QTabBar::tab:last:selected {
+	margin-right: 0px;
+}
+
+QTabBar::tab:only-one {
+	margin: 0;
+}
+</string>
+  </property>
+  <property name="usesScrollButtons">
+   <bool>true</bool>
   </property>
   <property name="documentMode">
    <bool>true</bool>
@@ -21,6 +67,9 @@
   </property>
   <property name="movable">
    <bool>true</bool>
+  </property>
+  <property name="tabBarAutoHide">
+   <bool>false</bool>
   </property>
   <widget class="TextEditWidget" name="starterTab">
    <attribute name="title">

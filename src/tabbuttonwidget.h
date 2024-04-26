@@ -15,18 +15,13 @@ public:
     explicit TabButtonWidget(QWidget *parent = nullptr);
     ~TabButtonWidget();
 
-    void setVisibleAddButton(bool visible) const;
-    void setVisibleCloseButton(bool visible) const;
-
 private:
     Ui::TabButtonWidget *ui;
 
 signals:
-    void addTabClicked();
     void closeTabClicked(TabButtonWidget*);
 
 private slots:
-    void onAddTabClicked();
     void onCloseTabClicked();
 };
 

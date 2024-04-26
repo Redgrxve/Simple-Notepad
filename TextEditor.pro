@@ -23,7 +23,8 @@ HEADERS += \
     src/mainwindow.h \
     src/tabbuttonwidget.h \
     src/tabwidget.h \
-    src/texteditwidget.h
+    src/texteditwidget.h \
+    src/utils.h
 
 FORMS += \
     src/filedialog.ui \

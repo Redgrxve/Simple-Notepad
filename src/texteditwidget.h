@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+class QTextEdit;
+
 namespace Ui {
 class TextEditWidget;
 }
@@ -17,6 +19,7 @@ public:
 
     void setText(const QString& text);
     QString getText() const;
+    QTextEdit* textEdit() const;
 
 private:
     Ui::TextEditWidget *ui;

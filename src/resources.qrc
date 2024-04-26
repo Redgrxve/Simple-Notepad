@@ -8,5 +8,6 @@
         <file>resources/icons/text-editor.png</file>
         <file>resources/icons/close.png</file>
         <file>resources/icons/plus.png</file>
+        <file>resources/icons/new-file.png</file>
     </qresource>
 </RCC>

@@ -22,13 +22,17 @@ public:
 private:
     Ui::MainWindow *ui;
     QString currentFilePath;
+    QStringList filePaths = {""};
 
     void openFile(const QString& filePath);
     void saveFile(const QString& filePath);
 
 private slots:
+    void onNewTriggered();
     void onOpenTriggered();
     void onSaveTriggered();
     void onSaveAsTriggered();
+
+    void onTabClose(int tabIndex);
 };
 #endif // MAINWINDOW_H

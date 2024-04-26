@@ -22,3 +22,8 @@ QString TextEditWidget::getText() const
 {
     return ui->textEdit->toPlainText();
 }
+
+QTextEdit* TextEditWidget::textEdit() const
+{
+    return ui->textEdit;
+}
