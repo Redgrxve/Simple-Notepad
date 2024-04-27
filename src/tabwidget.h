@@ -17,17 +17,20 @@ public:
     explicit TabWidget(QWidget *parent = nullptr);
     ~TabWidget();
 
-    int addTabWithButton(const QString& tabText);
+    int addTabWithButton(const QString& tabText = "");
     void setCurrentTabText(const QString& text);
+    QString getCurrentTabText() const;
 
 private:
     Ui::TabWidget *ui;
 
 signals:
-    void closeTabClicked(int);
+    void tabClosed(int index);
+    void tabEdited();
 
 private slots:
     void onCloseTabClicked(TabButtonWidget* sender);
+    void onTabEdited();
 };
 
 #endif // TABWIDGET_H

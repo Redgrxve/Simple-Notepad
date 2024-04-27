@@ -6,6 +6,7 @@ TextEditWidget::TextEditWidget(QWidget *parent)
     , ui(new Ui::TextEditWidget)
 {
     ui->setupUi(this);
+    connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 }
 
 TextEditWidget::~TextEditWidget()
@@ -26,4 +27,9 @@ QString TextEditWidget::getText() const
 QTextEdit* TextEditWidget::textEdit() const
 {
     return ui->textEdit;
+}
+
+void TextEditWidget::onTextChanged()
+{
+    emit textChanged();
 }

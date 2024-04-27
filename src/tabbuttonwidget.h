@@ -19,7 +19,7 @@ private:
     Ui::TabButtonWidget *ui;
 
 signals:
-    void closeTabClicked(TabButtonWidget*);
+    void closeTabClicked(TabButtonWidget* sender);
 
 private slots:
     void onCloseTabClicked();

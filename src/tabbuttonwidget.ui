@@ -26,7 +26,14 @@
 QPushButton:hover {
 	border-radius: 5px;
 	background: #3498db;
-}</string>
+}
+
+QPushButton:pressed {
+	border-radius: 5px;
+	background: #2980b9;
+}
+
+</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="sizeConstraint">

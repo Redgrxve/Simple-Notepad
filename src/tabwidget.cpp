@@ -13,6 +13,7 @@ TabWidget::TabWidget(QWidget* parent)
     TabButtonWidget* tabButton = new TabButtonWidget(ui->starterTab);
     tabBar()->setTabButton(0, QTabBar::RightSide, tabButton);
     connect(tabButton, SIGNAL(closeTabClicked(TabButtonWidget*)), this, SLOT(onCloseTabClicked(TabButtonWidget*)));
+    connect(ui->starterTab, SIGNAL(textChanged()), this, SLOT(onTabEdited()));
 }
 
 TabWidget::~TabWidget()
@@ -27,6 +28,7 @@ int TabWidget::addTabWithButton(const QString& tabText)
     int newTabIndex = addTab(newTab, tabText.isEmpty() ? "New file" : tabText);
     tabBar()->setTabButton(newTabIndex, QTabBar::RightSide, tabButton);
     connect(tabButton, SIGNAL(closeTabClicked(TabButtonWidget*)), this, SLOT(onCloseTabClicked(TabButtonWidget*)));
+    connect(newTab, SIGNAL(textChanged()), this, SLOT(onTabEdited()));
     setCurrentIndex(newTabIndex);
     return newTabIndex;
 }
@@ -36,11 +38,21 @@ void TabWidget::setCurrentTabText(const QString& text)
     setTabText(currentIndex(), text);
 }
 
+QString TabWidget::getCurrentTabText() const
+{
+    return tabText(currentIndex());
+}
+
 void TabWidget::onCloseTabClicked(TabButtonWidget* sender)
 {
     if (count() <= 1) return;
 
     int tabIndex = tabBar()->tabAt(sender->pos());
     removeTab(tabIndex);
-    emit closeTabClicked(tabIndex);
+    emit tabClosed(tabIndex);
+}
+
+void TabWidget::onTabEdited()
+{
+    emit tabEdited();
 }

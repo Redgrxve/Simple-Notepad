@@ -21,8 +21,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QString currentFilePath;
-    QStringList filePaths = {""};
+    QStringList filePaths;
 
     void openFile(const QString& filePath);
     void saveFile(const QString& filePath);
@@ -33,6 +32,8 @@ private slots:
     void onSaveTriggered();
     void onSaveAsTriggered();
 
-    void onTabClose(int tabIndex);
+    void onTabClosed(int tabIndex);
+    void onTabMoved(int from, int to);
+    void onTabEdited();
 };
 #endif // MAINWINDOW_H

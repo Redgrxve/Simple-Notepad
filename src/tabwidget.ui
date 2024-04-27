@@ -39,8 +39,8 @@ QTabBar::tab:!selected {
 QTabBar::tab:selected {
 	background: #95a5a6;
 	font-weight: bold;
-	margin-left: -7px;
-    margin-right: -7px;
+	margin-left: -4px;
+    margin-right: -4px;
 }
 
 QTabBar::tab:first:selected {
@@ -53,6 +53,18 @@ QTabBar::tab:last:selected {
 
 QTabBar::tab:only-one {
 	margin: 0;
+}
+
+QTabBar::scroller {
+	border: 1px solid black;
+	border-radius: 5px;
+	background: #95a5a6;
+	width: 50px;
+}
+
+QPushButton:pressed {
+	background: #2980b9;
+	border-radius: 5px;
 }
 </string>
   </property>

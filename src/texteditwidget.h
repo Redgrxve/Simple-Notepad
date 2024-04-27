@@ -23,6 +23,12 @@ public:
 
 private:
     Ui::TextEditWidget *ui;
+
+signals:
+    void textChanged();
+
+private slots:
+    void onTextChanged();
 };
 
 #endif // TEXTEDITWIDGET_H

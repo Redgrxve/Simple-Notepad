@@ -12,7 +12,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->tabWidget, SIGNAL(closeTabClicked(int)), this, SLOT(onTabClose(int)));
+    connect(ui->tabWidget, SIGNAL(tabClosed(int)), this, SLOT(onTabClosed(int)));
+    connect(ui->tabWidget->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(onTabMoved(int, int)));
+    connect(ui->tabWidget, SIGNAL(tabEdited()), this, SLOT(onTabEdited()));
+    filePaths.push_back("");
 }
 
 MainWindow::~MainWindow()
@@ -41,7 +44,6 @@ void MainWindow::openFile(const QString &filePath)
     QString buffer = stream.readAll();
     file.close();
     textEditWidget->setText(buffer);
-    currentFilePath = filePath;
     ui->statusbar->showMessage("The file readed: " + filePath);
     ui->tabWidget->setCurrentTabText(QFileInfo(filePath).fileName());
 }
@@ -66,18 +68,13 @@ void MainWindow::saveFile(const QString &filePath)
     QTextStream stream(&file);
     stream << textEditWidget->getText();
     file.close();
-    currentFilePath = filePath;
     ui->statusbar->showMessage("The file saved: " + filePath);
 }
 
 void MainWindow::onNewTriggered()
 {
-    QString filePath = Utils::getOpenFileName(this);
-    if (filePath.isEmpty()) return;
-
-    ui->tabWidget->addTabWithButton("");
-    openFile(filePath);
-    filePaths.push_back(filePath);
+    ui->tabWidget->addTabWithButton();
+    filePaths.push_back("");
 }
 
 void MainWindow::onOpenTriggered()
@@ -110,8 +107,21 @@ void MainWindow::onSaveAsTriggered()
     filePaths[ui->tabWidget->currentIndex()] = filePath;
 }
 
-void MainWindow::onTabClose(int tabIndex)
+void MainWindow::onTabClosed(int tabIndex)
 {
     filePaths.removeAt(tabIndex);
+}
+
+void MainWindow::onTabMoved(int from, int to)
+{
+    filePaths.swapItemsAt(from, to);
+}
+
+void MainWindow::onTabEdited()
+{
+    // if (ui->tabWidget->currentTabChanged()) return;
+
+    // QString currentTabText = ui->tabWidget->getCurrentTabText();
+    // ui->tabWidget->setCurrentTabText(currentTabText + "*");
 }
 
