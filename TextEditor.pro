@@ -11,27 +11,29 @@ CONFIG += c++17
 INCLUDEPATH += "src/"
 
 SOURCES += \
-    src/filedialog.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/tabbuttonwidget.cpp \
     src/tabwidget.cpp \
-    src/texteditwidget.cpp
+    src/tefile.cpp \
+    src/texteditwidget.cpp \
+    src/unsavedfilesdialog.cpp
 
 HEADERS += \
-    src/filedialog.h \
     src/mainwindow.h \
     src/tabbuttonwidget.h \
     src/tabwidget.h \
+    src/tefile.h \
     src/texteditwidget.h \
+    src/unsavedfilesdialog.h \
     src/utils.h
 
 FORMS += \
-    src/filedialog.ui \
     src/mainwindow.ui \
     src/tabbuttonwidget.ui \
     src/tabwidget.ui \
-    src/texteditwidget.ui
+    src/texteditwidget.ui \
+    src/unsavedfilesdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

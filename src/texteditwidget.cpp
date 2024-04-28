@@ -1,6 +1,10 @@
 #include "texteditwidget.h"
 #include "ui_texteditwidget.h"
 
+#include <QMessageBox>
+#include <QFile>
+#include <QFileInfo>
+
 TextEditWidget::TextEditWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::TextEditWidget)
@@ -12,6 +16,37 @@ TextEditWidget::TextEditWidget(QWidget *parent)
 TextEditWidget::~TextEditWidget()
 {
     delete ui;
+}
+
+void TextEditWidget::readFile(const QString &filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::information(this, tr("Error"), tr("File can't be opened"));
+        return;
+    }
+
+    QString buffer = file.readAll();
+    file.close();
+    setText(buffer);
+    isSaved = true;
+    this->filePath = filePath;
+    emit textSaved(QFileInfo(filePath).fileName());
+}
+
+void TextEditWidget::saveToFile(const QString &filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        QMessageBox::information(this, tr("Error"), tr("File can't be opened"));
+        return;
+    }
+
+    file.write(getText().toUtf8());
+    file.close();
+    isSaved = true;
+    this->filePath = filePath;
+    emit textSaved(QFileInfo(filePath).fileName());
 }
 
 void TextEditWidget::setText(const QString& text)
@@ -31,5 +66,8 @@ QTextEdit* TextEditWidget::textEdit() const
 
 void TextEditWidget::onTextChanged()
 {
-    emit textChanged();
+    if (!isSaved) return;
+
+    isSaved = false;
+    emit textUnsaved();
 }

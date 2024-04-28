@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UnsavedFilesDialog</class>
+ <widget class="QDialog" name="UnsavedFilesDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>234</width>
+    <height>102</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+	background: #bdc3c7;
+}
+
+QLabel {
+	color: black;
+}
+
+QPushButton {
+	border: 2px solid black;
+	border-radius: 5px;
+	padding: 5px 15px;
+	color:black;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+QPushButton{
+	margin-right: 10px;
+	margin-left: 10px;
+}
+
+QPushButton:hover {
+	background: #3498db;
+	border-radius: 5px;
+}
+
+QPushButton:pressed {
+	border-radius: 5px;
+	background: #2980b9;
+}
+</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Do you want to save </string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="locale">
+        <locale language="Russian" country="Russia"/>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::No|QDialogButtonBox::Yes</set>
+       </property>
+       <property name="centerButtons">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

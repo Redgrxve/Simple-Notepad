@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "texteditwidget.h"
 #include "utils.h"
+#include "unsavedfilesdialog.h"
+
 #include <QtWidgets>
 #include <QFile>
 #include <QTextStream>
@@ -12,10 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->tabWidget, SIGNAL(tabClosed(int)), this, SLOT(onTabClosed(int)));
-    connect(ui->tabWidget->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(onTabMoved(int, int)));
-    connect(ui->tabWidget, SIGNAL(tabEdited()), this, SLOT(onTabEdited()));
-    filePaths.push_back("");
+    connect(ui->tabWidget, SIGNAL(tabAdded(int)), this, SLOT(onTabAdded()));
+    connect(ui->tabWidget, SIGNAL(tabClosed(int)), this, SLOT(onTabClosed()));
 }
 
 MainWindow::~MainWindow()
@@ -23,78 +23,41 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::openFile(const QString &filePath)
-{
-    QFile file(filePath);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::information(this, "Error", "File can't be opened");
-        ui->statusbar->showMessage("Open the file error");
-        return;
-    }
-
-    auto textEditWidget = qobject_cast<TextEditWidget*>(ui->tabWidget->currentWidget());
-    if (!textEditWidget) {
-        file.close();
-        QMessageBox::information(this, tr("Error"), tr("Opening the file error"));
-        ui->statusbar->showMessage(tr("Opening the file error"));
-        return;
-    }
-
-    QTextStream stream(&file);
-    QString buffer = stream.readAll();
-    file.close();
-    textEditWidget->setText(buffer);
-    ui->statusbar->showMessage("The file readed: " + filePath);
-    ui->tabWidget->setCurrentTabText(QFileInfo(filePath).fileName());
-}
-
-void MainWindow::saveFile(const QString &filePath)
-{
-    QFile file(filePath);
-    if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        QMessageBox::information(this, tr("Error"), tr("File can't be saved"));
-        ui->statusbar->showMessage(tr("Save the file error"));
-        return;
-    }
-
-    auto textEditWidget = qobject_cast<TextEditWidget*>(ui->tabWidget->currentWidget());
-    if (!textEditWidget) {
-        file.close();
-        QMessageBox::information(this, tr("Error"), tr("File can't be saved"));
-        ui->statusbar->showMessage(tr("Save the file error"));
-        return;
-    }
-
-    QTextStream stream(&file);
-    stream << textEditWidget->getText();
-    file.close();
-    ui->statusbar->showMessage("The file saved: " + filePath);
-}
-
 void MainWindow::onNewTriggered()
 {
     ui->tabWidget->addTabWithButton();
-    filePaths.push_back("");
 }
 
 void MainWindow::onOpenTriggered()
 {
+    if (ui->tabWidget->isCurrentTabUnsaved()) {
+        UnsavedFilesDialog* saveDialog = new UnsavedFilesDialog(this);
+        QString dialogLabel = "Do you want to save " + ui->tabWidget->getCurrentTabText();
+        dialogLabel[dialogLabel.length() - 1] = '?';
+        saveDialog->setLabel(dialogLabel);
+        connect(saveDialog, SIGNAL(saveAccepted()), this, SLOT(onSaveDialogAccepted()));
+        connect(saveDialog, SIGNAL(saveRejected()), this, SLOT(onSaveDialogRejected()));
+        saveDialog->exec();
+        return;
+    }
+
     QString filePath = Utils::getOpenFileName(this);
     if (filePath.isEmpty()) return;
 
-    openFile(filePath);
-    filePaths[ui->tabWidget->currentIndex()] = filePath;
+    ui->tabWidget->openFileInCurrentTab(filePath);
+    ui->statusbar->showMessage(tr("The file readed: ") + filePath);
 }
 
 void MainWindow::onSaveTriggered()
 {
-    QString currentFilePath = filePaths[ui->tabWidget->currentIndex()];
-    if (currentFilePath.isEmpty()) {
+    QString filePath = ui->tabWidget->getCurrentTextEdit()->getFilePath();
+    if (filePath.isEmpty()) {
         onSaveAsTriggered();
         return;
     }
 
-    saveFile(currentFilePath);
+    ui->tabWidget->saveCurrentTab(filePath);
+    ui->statusbar->showMessage(tr("The file saved: ") + filePath);
 }
 
 void MainWindow::onSaveAsTriggered()
@@ -102,26 +65,39 @@ void MainWindow::onSaveAsTriggered()
     QString filePath = Utils::getSaveFileName(this);
     if (filePath.isEmpty()) return;
 
-    saveFile(filePath);
-    openFile(filePath);
-    filePaths[ui->tabWidget->currentIndex()] = filePath;
+    ui->tabWidget->saveCurrentTab(filePath);
+    ui->statusbar->showMessage(tr("The file saved: ") + filePath);
 }
 
-void MainWindow::onTabClosed(int tabIndex)
+void MainWindow::onTabAdded()
 {
-    filePaths.removeAt(tabIndex);
+    if (ui->tabWidget->count() == 1) {
+        ui->actionSave->setEnabled(true);
+        ui->actionSave_As->setEnabled(true);
+    }
 }
 
-void MainWindow::onTabMoved(int from, int to)
+void MainWindow::onTabClosed()
 {
-    filePaths.swapItemsAt(from, to);
+    if (ui->tabWidget->count() == 0) {
+        ui->actionSave->setEnabled(false);
+        ui->actionSave_As->setEnabled(false);
+    }
 }
 
-void MainWindow::onTabEdited()
+void MainWindow::onSaveDialogAccepted()
 {
-    // if (ui->tabWidget->currentTabChanged()) return;
-
-    // QString currentTabText = ui->tabWidget->getCurrentTabText();
-    // ui->tabWidget->setCurrentTabText(currentTabText + "*");
+    onSaveAsTriggered();
+    onOpenTriggered();
 }
+
+void MainWindow::onSaveDialogRejected()
+{
+    QString filePath = Utils::getOpenFileName(this);
+    if (filePath.isEmpty()) return;
+
+    ui->tabWidget->openFileInCurrentTab(filePath);
+    ui->statusbar->showMessage(tr("The file readed: ") + filePath);
+}
+
 

@@ -9,8 +9,6 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-class FileDialog;
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -21,10 +19,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QStringList filePaths;
-
-    void openFile(const QString& filePath);
-    void saveFile(const QString& filePath);
 
 private slots:
     void onNewTriggered();
@@ -32,8 +26,10 @@ private slots:
     void onSaveTriggered();
     void onSaveAsTriggered();
 
-    void onTabClosed(int tabIndex);
-    void onTabMoved(int from, int to);
-    void onTabEdited();
+    void onTabAdded();
+    void onTabClosed();
+
+    void onSaveDialogAccepted();
+    void onSaveDialogRejected();
 };
 #endif // MAINWINDOW_H

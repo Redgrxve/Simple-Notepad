@@ -83,21 +83,7 @@ QPushButton:pressed {
   <property name="tabBarAutoHide">
    <bool>false</bool>
   </property>
-  <widget class="TextEditWidget" name="starterTab">
-   <attribute name="title">
-    <string>New file</string>
-   </attribute>
-   <layout class="QGridLayout" name="gridLayout"/>
-  </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>TextEditWidget</class>
-   <extends>QWidget</extends>
-   <header>texteditwidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
