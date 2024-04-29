@@ -12,17 +12,18 @@ class UnsavedFilesDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit UnsavedFilesDialog(QWidget *parent = nullptr);
+    explicit UnsavedFilesDialog(int fileTabIndex, QWidget *parent = nullptr);
     ~UnsavedFilesDialog();
 
     void setLabel(const QString& text);
 
 private:
     Ui::UnsavedFilesDialog *ui;
+    int tabIndex;
 
 signals:
-    void saveAccepted();
-    void saveRejected();
+    void saveAccepted(int tabIndex);
+    void saveRejected(int tabIndex);
 
 private slots:
     void onYesClicked();

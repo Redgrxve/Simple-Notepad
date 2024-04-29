@@ -1,24 +1,24 @@
-#include "texteditwidget.h"
-#include "ui_texteditwidget.h"
+#include "textfileeditwidget.h"
+#include "ui_textfileeditwidget.h"
 
 #include <QMessageBox>
 #include <QFile>
 #include <QFileInfo>
 
-TextEditWidget::TextEditWidget(QWidget *parent)
+TextFileEditWidget::TextFileEditWidget(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::TextEditWidget)
+    , ui(new Ui::TextFileEditWidget)
 {
     ui->setupUi(this);
     connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 }
 
-TextEditWidget::~TextEditWidget()
+TextFileEditWidget::~TextFileEditWidget()
 {
     delete ui;
 }
 
-void TextEditWidget::readFile(const QString &filePath)
+void TextFileEditWidget::readFile(const QString &filePath)
 {
     QFile file(filePath);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -34,7 +34,7 @@ void TextEditWidget::readFile(const QString &filePath)
     emit textSaved(QFileInfo(filePath).fileName());
 }
 
-void TextEditWidget::saveToFile(const QString &filePath)
+void TextFileEditWidget::saveToFile(const QString &filePath)
 {
     QFile file(filePath);
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
@@ -49,22 +49,22 @@ void TextEditWidget::saveToFile(const QString &filePath)
     emit textSaved(QFileInfo(filePath).fileName());
 }
 
-void TextEditWidget::setText(const QString& text)
+void TextFileEditWidget::setText(const QString& text)
 {
     ui->textEdit->setText(text);
 }
 
-QString TextEditWidget::getText() const
+QString TextFileEditWidget::getText() const
 {
     return ui->textEdit->toPlainText();
 }
 
-QTextEdit* TextEditWidget::textEdit() const
+QTextEdit* TextFileEditWidget::textEdit() const
 {
     return ui->textEdit;
 }
 
-void TextEditWidget::onTextChanged()
+void TextFileEditWidget::onTextChanged()
 {
     if (!isSaved) return;
 

@@ -14,25 +14,23 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/tabbuttonwidget.cpp \
-    src/tabwidget.cpp \
-    src/tefile.cpp \
-    src/texteditwidget.cpp \
+    src/tabtextwidget.cpp \
+    src/textfileeditwidget.cpp \
     src/unsavedfilesdialog.cpp
 
 HEADERS += \
     src/mainwindow.h \
     src/tabbuttonwidget.h \
-    src/tabwidget.h \
-    src/tefile.h \
-    src/texteditwidget.h \
+    src/tabtextwidget.h \
+    src/textfileeditwidget.h \
     src/unsavedfilesdialog.h \
     src/utils.h
 
 FORMS += \
     src/mainwindow.ui \
     src/tabbuttonwidget.ui \
-    src/tabwidget.ui \
-    src/texteditwidget.ui \
+    src/tabtextwidget.ui \
+    src/textfileeditwidget.ui \
     src/unsavedfilesdialog.ui
 
 # Default rules for deployment.

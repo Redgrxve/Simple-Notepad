@@ -124,7 +124,7 @@ QPushButton:pressed {
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="TabWidget" name="tabWidget">
+     <widget class="TabTextWidget" name="tabWidget">
       <property name="currentIndex">
        <number>-1</number>
       </property>
@@ -276,9 +276,9 @@ QPushButton:pressed {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TabWidget</class>
+   <class>TabTextWidget</class>
    <extends>QTabWidget</extends>
-   <header>tabwidget.h</header>
+   <header>tabtextwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

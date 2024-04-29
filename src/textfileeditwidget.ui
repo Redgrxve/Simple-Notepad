@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TextEditWidget</class>
- <widget class="QWidget" name="TextEditWidget">
+ <class>TextFileEditWidget</class>
+ <widget class="QWidget" name="TextFileEditWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -36,7 +36,11 @@ QTextEdit {
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QTextEdit" name="textEdit"/>
+    <widget class="QTextEdit" name="textEdit">
+     <property name="lineWrapMode">
+      <enum>QTextEdit::NoWrap</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

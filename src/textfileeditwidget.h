@@ -1,21 +1,21 @@
-#ifndef TEXTEDITWIDGET_H
-#define TEXTEDITWIDGET_H
+#ifndef TEXTFILEEDITWIDGET_H
+#define TEXTFILEEDITWIDGET_H
 
 #include <QWidget>
 
 class QTextEdit;
 
 namespace Ui {
-class TextEditWidget;
+class TextFileEditWidget;
 }
 
-class TextEditWidget : public QWidget
+class TextFileEditWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TextEditWidget(QWidget *parent = nullptr);
-    ~TextEditWidget();
+    explicit TextFileEditWidget(QWidget *parent = nullptr);
+    ~TextFileEditWidget();
 
     void readFile(const QString& filePath);
     void saveToFile(const QString& filePath);
@@ -27,7 +27,7 @@ public:
     bool isUnsaved() const { return !isSaved; }
 
 private:
-    Ui::TextEditWidget *ui;
+    Ui::TextFileEditWidget *ui;
     bool isSaved = true;
     QString filePath = "";
 
@@ -39,4 +39,4 @@ private slots:
     void onTextChanged();
 };
 
-#endif // TEXTEDITWIDGET_H
+#endif // TEXTFILEEDITWIDGET_H

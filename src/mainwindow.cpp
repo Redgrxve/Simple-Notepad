@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "texteditwidget.h"
+#include "textfileeditwidget.h"
 #include "utils.h"
 #include "unsavedfilesdialog.h"
 
@@ -30,21 +30,22 @@ void MainWindow::onNewTriggered()
 
 void MainWindow::onOpenTriggered()
 {
-    if (ui->tabWidget->isCurrentTabUnsaved()) {
-        UnsavedFilesDialog* saveDialog = new UnsavedFilesDialog(this);
-        QString dialogLabel = "Do you want to save " + ui->tabWidget->getCurrentTabText();
-        dialogLabel[dialogLabel.length() - 1] = '?';
-        saveDialog->setLabel(dialogLabel);
-        connect(saveDialog, SIGNAL(saveAccepted()), this, SLOT(onSaveDialogAccepted()));
-        connect(saveDialog, SIGNAL(saveRejected()), this, SLOT(onSaveDialogRejected()));
-        saveDialog->exec();
-        return;
-    }
+    //ДОДЕЛАТЬ
+    // if (ui->tabWidget->isCurrentTabUnsaved()) {
+    //     UnsavedFilesDialog* saveDialog = new UnsavedFilesDialog(this);
+    //     QString dialogLabel = "Do you want to save " + ui->tabWidget->getCurrentTabText();
+    //     dialogLabel[dialogLabel.length() - 1] = '?';
+    //     saveDialog->setLabel(dialogLabel);
+    //     connect(saveDialog, SIGNAL(saveAccepted()), this, SLOT(onSaveDialogAccepted()));
+    //     connect(saveDialog, SIGNAL(saveRejected()), this, SLOT(onSaveDialogRejected()));
+    //     saveDialog->exec();
+    //     return;
+    // }
 
     QString filePath = Utils::getOpenFileName(this);
     if (filePath.isEmpty()) return;
 
-    ui->tabWidget->openFileInCurrentTab(filePath);
+    ui->tabWidget->openFileInNewTab(filePath);
     ui->statusbar->showMessage(tr("The file readed: ") + filePath);
 }
 
@@ -96,7 +97,7 @@ void MainWindow::onSaveDialogRejected()
     QString filePath = Utils::getOpenFileName(this);
     if (filePath.isEmpty()) return;
 
-    ui->tabWidget->openFileInCurrentTab(filePath);
+    ui->tabWidget->openFileInNewTab(filePath);
     ui->statusbar->showMessage(tr("The file readed: ") + filePath);
 }
 

@@ -1,9 +1,10 @@
 #include "unsavedfilesdialog.h"
 #include "ui_unsavedfilesdialog.h"
 
-UnsavedFilesDialog::UnsavedFilesDialog(QWidget *parent)
+UnsavedFilesDialog::UnsavedFilesDialog(int fileTabIndex, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::UnsavedFilesDialog)
+    , tabIndex(fileTabIndex)
 {
     ui->setupUi(this);
 
@@ -25,11 +26,11 @@ void UnsavedFilesDialog::setLabel(const QString &text)
 void UnsavedFilesDialog::onYesClicked()
 {
     close();
-    emit saveAccepted();
+    emit saveAccepted(tabIndex);
 }
 
 void UnsavedFilesDialog::onNoClicked()
 {
     close();
-    emit saveRejected();
+    emit saveRejected(tabIndex);
 }

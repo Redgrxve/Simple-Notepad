@@ -7,7 +7,7 @@ TabButtonWidget::TabButtonWidget(QWidget* parent)
 {
     ui->setupUi(this);
 
-    connect(ui->closeTabButton, SIGNAL(clicked(bool)), this, SLOT(onCloseTabClicked()));
+    connect(ui->closeTabButton, SIGNAL(clicked(bool)), this, SLOT(onClicked()));
 }
 
 TabButtonWidget::~TabButtonWidget()
@@ -15,9 +15,9 @@ TabButtonWidget::~TabButtonWidget()
     delete ui;
 }
 
-void TabButtonWidget::onCloseTabClicked()
+void TabButtonWidget::onClicked()
 {
-    emit closeTabClicked(this);
+    emit clicked(this);
 }
 
 
