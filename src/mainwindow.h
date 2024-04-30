@@ -20,6 +20,9 @@ public:
 private:
     Ui::MainWindow *ui;
 
+protected:
+    void closeEvent(QCloseEvent* closeEvent) override;
+
 private slots:
     void onNewTriggered();
     void onOpenTriggered();

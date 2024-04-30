@@ -23,6 +23,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::closeEvent(QCloseEvent *closeEvent)
+{
+    ui->tabWidget->saveAllUnsavedTabs();
+    QMainWindow::closeEvent(closeEvent);
+}
+
 void MainWindow::onNewTriggered()
 {
     ui->tabWidget->addTabWithButton();
@@ -30,18 +36,6 @@ void MainWindow::onNewTriggered()
 
 void MainWindow::onOpenTriggered()
 {
-    //ДОДЕЛАТЬ
-    // if (ui->tabWidget->isCurrentTabUnsaved()) {
-    //     UnsavedFilesDialog* saveDialog = new UnsavedFilesDialog(this);
-    //     QString dialogLabel = "Do you want to save " + ui->tabWidget->getCurrentTabText();
-    //     dialogLabel[dialogLabel.length() - 1] = '?';
-    //     saveDialog->setLabel(dialogLabel);
-    //     connect(saveDialog, SIGNAL(saveAccepted()), this, SLOT(onSaveDialogAccepted()));
-    //     connect(saveDialog, SIGNAL(saveRejected()), this, SLOT(onSaveDialogRejected()));
-    //     saveDialog->exec();
-    //     return;
-    // }
-
     QString filePath = Utils::getOpenFileName(this);
     if (filePath.isEmpty()) return;
 

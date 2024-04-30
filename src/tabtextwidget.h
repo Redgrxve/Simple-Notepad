@@ -2,6 +2,7 @@
 #define TABTEXTWIDGET_H
 
 #include <QTabWidget>
+#include <QStack>
 
 class TabButtonWidget;
 class TextFileEditWidget;
@@ -21,8 +22,11 @@ public:
     void openFileInNewTab(const QString &filePath);
     void openFileInCurrentTab(const QString &filePath);
     void saveCurrentTab(const QString &filePath);
+    void saveTab(int tabIndex, const QString &filePath);
+    void saveAllUnsavedTabs();
     int addTabWithButton();
     TextFileEditWidget* getCurrentTextEdit();
+    TextFileEditWidget* getTextEdit(int tabIndex);
     void setCurrentTabText(const QString &text);
     QString getCurrentTabText() const;
     bool isCurrentTabUnsaved();
@@ -30,8 +34,10 @@ public:
 private:
     Ui::TabTextWidget *ui;
     int newTabNumber = 0;
+    QStack<int> unsavedTabsIndexes;
 
     void readFile(const QString& filePath);
+    void execSaveDialog(int unsavedTabIndex);
 
 signals:
     void tabAdded(int index);

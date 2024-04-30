@@ -3,15 +3,19 @@
 #include "tabbuttonwidget.h"
 #include "ui_tabtextwidget.h"
 #include "unsavedfilesdialog.h"
+#include "utils.h"
 
 #include <QTabBar>
 #include <QMessageBox>
+#include <QStack>
 
 TabTextWidget::TabTextWidget(QWidget* parent)
     : QTabWidget(parent)
     , ui(new Ui::TabTextWidget)
 {
     ui->setupUi(this);
+
+    addTabWithButton();
 }
 
 TabTextWidget::~TabTextWidget()
@@ -44,6 +48,26 @@ void TabTextWidget::saveCurrentTab(const QString &filePath)
     textEdit->saveToFile(filePath);
 }
 
+void TabTextWidget::saveTab(int tabIndex, const QString &filePath)
+{
+    auto textEdit = getTextEdit(tabIndex);
+    if (!textEdit) {
+        QMessageBox::information(this, tr("Error"), tr("Save the file error"));
+        return;
+    }
+
+    textEdit->saveToFile(filePath);
+}
+
+void TabTextWidget::saveAllUnsavedTabs()
+{
+    std::sort(unsavedTabsIndexes.begin(), unsavedTabsIndexes.end());
+    while (unsavedTabsIndexes.size() != 0) {
+        int unsevedTabIndex = unsavedTabsIndexes.pop();
+        execSaveDialog(unsevedTabIndex);
+    }
+}
+
 int TabTextWidget::addTabWithButton()
 {
     TextFileEditWidget* newTab = new TextFileEditWidget(this);
@@ -61,6 +85,11 @@ int TabTextWidget::addTabWithButton()
 TextFileEditWidget *TabTextWidget::getCurrentTextEdit()
 {
     return qobject_cast<TextFileEditWidget*>(currentWidget());
+}
+
+TextFileEditWidget *TabTextWidget::getTextEdit(int tabIndex)
+{
+    return qobject_cast<TextFileEditWidget*>(widget(tabIndex));
 }
 
 void TabTextWidget::setCurrentTabText(const QString& text)
@@ -92,33 +121,44 @@ void TabTextWidget::readFile(const QString& filePath)
     textEdit->readFile(filePath);
 }
 
+void TabTextWidget::execSaveDialog(int unsavedTabIndex)
+{
+    UnsavedFilesDialog* saveDialog = new UnsavedFilesDialog(unsavedTabIndex, this);
+    QString dialogLabel = "Do you want to save " + tabText(unsavedTabIndex);
+    dialogLabel[dialogLabel.length() - 1] = '?';
+    saveDialog->setLabel(dialogLabel);
+    connect(saveDialog, SIGNAL(saveAccepted(int)), this, SLOT(onSaveDialogAccepted(int)));
+    connect(saveDialog, SIGNAL(saveRejected(int)), this, SLOT(onSaveDialogRejected(int)));
+    saveDialog->exec();
+}
+
 void TabTextWidget::onCloseTabClicked(const TabButtonWidget* sender)
 {
-    //ДОДЕЛАТЬ
-    // if (isCurrentTabUnsaved()) {
-    //     UnsavedFilesDialog* saveDialog = new UnsavedFilesDialog(tabIndex, this);
-    //     QString dialogLabel = "Do you want to save " + getCurrentTabText();
-    //     dialogLabel[dialogLabel.length() - 1] = '?';
-    //     saveDialog->setLabel(dialogLabel);
-    //     connect(saveDialog, SIGNAL(saveAccepted(int)), this, SLOT(onSaveDialogAccepted(int)));
-    //     connect(saveDialog, SIGNAL(saveRejected(int)), this, SLOT(onSaveDialogRejected(int)));
-    //     saveDialog->exec();
-    //     return;
-    // }
-
     int tabIndex = tabBar()->tabAt(sender->pos());
+
+    if (isCurrentTabUnsaved()) {
+        execSaveDialog(tabIndex);
+        return;
+    }
+
     removeTab(tabIndex);
+    if (count() == 0)
+        newTabNumber = 0;
     emit tabClosed(tabIndex);
 }
 
 void TabTextWidget::onSaveDialogAccepted(int tabIndex)
 {
-    //ДОДЕЛАТЬ
+    QString filePath = Utils::getSaveFileName(this);
+    if (filePath.isEmpty()) return;
+
+    saveTab(tabIndex, filePath);
+    removeTab(tabIndex);
 }
 
 void TabTextWidget::onSaveDialogRejected(int tabIndex)
 {
-    //ДОДЕЛАТЬ
+    removeTab(tabIndex);
 }
 
 void TabTextWidget::onTextSaved(const QString& fileName)
@@ -130,6 +170,7 @@ void TabTextWidget::onTextSaved(const QString& fileName)
 void TabTextWidget::onTextUnsaved()
 {
     setCurrentTabText(getCurrentTabText() + "*");
+    unsavedTabsIndexes.push(currentIndex());
     emit tabUnsaved();
 }
 
