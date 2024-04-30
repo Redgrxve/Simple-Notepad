@@ -11,6 +11,7 @@ TextFileEditWidget::TextFileEditWidget(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
+    connect(ui->textEdit, SIGNAL(undoAvailable(bool)), this, SLOT(onUndoAvailable(bool)));
 }
 
 TextFileEditWidget::~TextFileEditWidget()
@@ -28,10 +29,11 @@ void TextFileEditWidget::readFile(const QString &filePath)
 
     QString buffer = file.readAll();
     file.close();
+    isSaved = false;
     setText(buffer);
     isSaved = true;
-    this->filePath = filePath;
-    emit textSaved(QFileInfo(filePath).fileName());
+    fileInfo = QFileInfo(filePath);
+    emit textReaded(fileInfo.fileName());
 }
 
 void TextFileEditWidget::saveToFile(const QString &filePath)
@@ -45,8 +47,8 @@ void TextFileEditWidget::saveToFile(const QString &filePath)
     file.write(getText().toUtf8());
     file.close();
     isSaved = true;
-    this->filePath = filePath;
-    emit textSaved(QFileInfo(filePath).fileName());
+    fileInfo = QFileInfo(filePath);
+    emit textSaved(fileInfo.filePath());
 }
 
 void TextFileEditWidget::setText(const QString& text)
@@ -70,4 +72,11 @@ void TextFileEditWidget::onTextChanged()
 
     isSaved = false;
     emit textUnsaved();
+}
+
+void TextFileEditWidget::onUndoAvailable(bool available)
+{
+    if (!available)
+        isSaved = true;
+    emit undoAvailable(available);
 }

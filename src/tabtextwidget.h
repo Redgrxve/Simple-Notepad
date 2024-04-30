@@ -34,7 +34,7 @@ public:
 private:
     Ui::TabTextWidget *ui;
     int newTabNumber = 0;
-    QStack<int> unsavedTabsIndexes;
+    QMap<int, int> unsavedTabsIndexes;
 
     void readFile(const QString& filePath);
     void execSaveDialog(int unsavedTabIndex);
@@ -50,8 +50,10 @@ private slots:
     void onCloseTabClicked(const TabButtonWidget* sender);
     void onSaveDialogAccepted(int tabIndex);
     void onSaveDialogRejected(int tabIndex);
+    void onTextReaded(const QString& fileName);
     void onTextSaved(const QString& fileName);
     void onTextUnsaved();
+    void onUndoAvailable(bool available);
 };
 
 #endif // TABTEXTWIDGET_H

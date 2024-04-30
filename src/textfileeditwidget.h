@@ -2,6 +2,7 @@
 #define TEXTFILEEDITWIDGET_H
 
 #include <QWidget>
+#include <QFileInfo>
 
 class QTextEdit;
 
@@ -22,21 +23,25 @@ public:
 
     void setText(const QString& text);
     QString getText() const;
-    QString getFilePath() const { return filePath; }
+    QString getFilePath() const { return fileInfo.filePath(); }
     QTextEdit* textEdit() const;
     bool isUnsaved() const { return !isSaved; }
 
 private:
     Ui::TextFileEditWidget *ui;
     bool isSaved = true;
-    QString filePath = "";
+    bool isFileReaded = false;
+    QFileInfo fileInfo;
 
 signals:
+    void textReaded(const QString& filePath);
     void textSaved(const QString& filePath);
     void textUnsaved();
+    void undoAvailable(bool available);
 
 private slots:
     void onTextChanged();
+    void onUndoAvailable(bool available);
 };
 
 #endif // TEXTFILEEDITWIDGET_H

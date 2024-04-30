@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include "textfileeditwidget.h"
 #include "utils.h"
-#include "unsavedfilesdialog.h"
 
 #include <QtWidgets>
 #include <QFile>
@@ -78,21 +77,6 @@ void MainWindow::onTabClosed()
         ui->actionSave->setEnabled(false);
         ui->actionSave_As->setEnabled(false);
     }
-}
-
-void MainWindow::onSaveDialogAccepted()
-{
-    onSaveAsTriggered();
-    onOpenTriggered();
-}
-
-void MainWindow::onSaveDialogRejected()
-{
-    QString filePath = Utils::getOpenFileName(this);
-    if (filePath.isEmpty()) return;
-
-    ui->tabWidget->openFileInNewTab(filePath);
-    ui->statusbar->showMessage(tr("The file readed: ") + filePath);
 }
 
 

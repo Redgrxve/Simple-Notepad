@@ -31,8 +31,5 @@ private slots:
 
     void onTabAdded();
     void onTabClosed();
-
-    void onSaveDialogAccepted();
-    void onSaveDialogRejected();
 };
 #endif // MAINWINDOW_H

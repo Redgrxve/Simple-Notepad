@@ -7,7 +7,7 @@
 
 #include <QTabBar>
 #include <QMessageBox>
-#include <QStack>
+#include <QFileInfo>
 
 TabTextWidget::TabTextWidget(QWidget* parent)
     : QTabWidget(parent)
@@ -25,12 +25,26 @@ TabTextWidget::~TabTextWidget()
 
 void TabTextWidget::openFileInNewTab(const QString &filePath)
 {
+    for (int i = 0; i < count(); ++i) {
+        if (QFileInfo(filePath) == QFileInfo(getTextEdit(i)->getFilePath())) {
+            setCurrentIndex(i);
+            return;
+        }
+    }
+
     addTabWithButton();
     readFile(filePath);
 }
 
 void TabTextWidget::openFileInCurrentTab(const QString &filePath)
 {
+    for (int i = 0; i < count(); ++i) {
+        if (QFileInfo(filePath) == QFileInfo(getTextEdit(i)->getFilePath())) {
+            setCurrentIndex(i);
+            return;
+        }
+    }
+
     if (!currentWidget())
         addTabWithButton();
 
@@ -46,6 +60,7 @@ void TabTextWidget::saveCurrentTab(const QString &filePath)
     }
 
     textEdit->saveToFile(filePath);
+    unsavedTabsIndexes.remove(currentIndex());
 }
 
 void TabTextWidget::saveTab(int tabIndex, const QString &filePath)
@@ -57,14 +72,15 @@ void TabTextWidget::saveTab(int tabIndex, const QString &filePath)
     }
 
     textEdit->saveToFile(filePath);
+    unsavedTabsIndexes.remove(tabIndex);
 }
 
 void TabTextWidget::saveAllUnsavedTabs()
 {
-    std::sort(unsavedTabsIndexes.begin(), unsavedTabsIndexes.end());
     while (unsavedTabsIndexes.size() != 0) {
-        int unsevedTabIndex = unsavedTabsIndexes.pop();
-        execSaveDialog(unsevedTabIndex);
+        int unsavedTabIndex = unsavedTabsIndexes.last();
+        setCurrentIndex(unsavedTabIndex);
+        execSaveDialog(unsavedTabIndex);
     }
 }
 
@@ -74,8 +90,10 @@ int TabTextWidget::addTabWithButton()
     TabButtonWidget* tabButton = new TabButtonWidget(newTab);
     int newTabIndex = addTab(newTab, "untitled" + QString::number(++newTabNumber));
     tabBar()->setTabButton(newTabIndex, QTabBar::RightSide, tabButton);
-    connect(newTab, SIGNAL(textSaved(const QString&)), this, SLOT(onTextSaved(const QString&)));
+    connect(newTab, SIGNAL(textReaded(QString)), this, SLOT(onTextReaded(QString)));
+    connect(newTab, SIGNAL(textSaved(QString)), this, SLOT(onTextSaved(QString)));
     connect(newTab, SIGNAL(textUnsaved()), this, SLOT(onTextUnsaved()));
+    connect(newTab, SIGNAL(undoAvailable(bool)), this, SLOT(onUndoAvailable(bool)));
     connect(tabButton, SIGNAL(clicked(const TabButtonWidget*)), this, SLOT(onCloseTabClicked(const TabButtonWidget*)));
     setCurrentIndex(newTabIndex);
     emit tabAdded(newTabIndex);
@@ -159,6 +177,12 @@ void TabTextWidget::onSaveDialogAccepted(int tabIndex)
 void TabTextWidget::onSaveDialogRejected(int tabIndex)
 {
     removeTab(tabIndex);
+    unsavedTabsIndexes.remove(tabIndex);
+}
+
+void TabTextWidget::onTextReaded(const QString &fileName)
+{
+    setCurrentTabText(fileName);
 }
 
 void TabTextWidget::onTextSaved(const QString& fileName)
@@ -170,7 +194,18 @@ void TabTextWidget::onTextSaved(const QString& fileName)
 void TabTextWidget::onTextUnsaved()
 {
     setCurrentTabText(getCurrentTabText() + "*");
-    unsavedTabsIndexes.push(currentIndex());
+    if (!unsavedTabsIndexes.contains(currentIndex()))
+        unsavedTabsIndexes[currentIndex()] = currentIndex();
     emit tabUnsaved();
+}
+
+void TabTextWidget::onUndoAvailable(bool available)
+{
+    if (!available) {
+        unsavedTabsIndexes.remove(currentIndex());
+        QString tabText = getCurrentTabText();
+        tabText.removeLast();
+        setCurrentTabText(tabText);
+    }
 }
 
