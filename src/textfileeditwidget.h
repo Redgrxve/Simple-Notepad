@@ -23,14 +23,18 @@ public:
 
     void setText(const QString& text);
     QString getText() const;
-    QString getFilePath() const { return fileInfo.filePath(); }
+    QString getFilePath() const;
     QTextEdit* textEdit() const;
-    bool isUnsaved() const { return !isSaved; }
+    bool isUnsaved() const;
+    bool isWrapEnabled() const;
+
+    void setLineWrap(bool wrap);
 
 private:
     Ui::TextFileEditWidget *ui;
     bool isSaved = true;
     bool isFileReaded = false;
+    bool wrapEnabled = false;
     QFileInfo fileInfo;
 
 signals:

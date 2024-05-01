@@ -9,5 +9,6 @@
         <file>resources/icons/close.png</file>
         <file>resources/icons/plus.png</file>
         <file>resources/icons/new-file.png</file>
+        <file>resources/icons/check.png</file>
     </qresource>
 </RCC>

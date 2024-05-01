@@ -23,7 +23,7 @@ public:
     void openFileInCurrentTab(const QString &filePath);
     void saveCurrentTab(const QString &filePath);
     void saveTab(int tabIndex, const QString &filePath);
-    void saveAllUnsavedTabs();
+    void saveAllUnsavedTabs(bool enableSaveDialog);
     int addTabWithButton();
     TextFileEditWidget* getCurrentTextEdit();
     TextFileEditWidget* getTextEdit(int tabIndex);

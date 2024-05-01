@@ -28,7 +28,10 @@ private slots:
     void onOpenTriggered();
     void onSaveTriggered();
     void onSaveAsTriggered();
+    void onSaveAllTriggered();
+    void onWordWrapToggled(bool wrap);
 
+    void onCurrentTabChanged(int index);
     void onTabAdded();
     void onTabClosed();
 };

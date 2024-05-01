@@ -48,7 +48,7 @@ void TextFileEditWidget::saveToFile(const QString &filePath)
     file.close();
     isSaved = true;
     fileInfo = QFileInfo(filePath);
-    emit textSaved(fileInfo.filePath());
+    emit textSaved(fileInfo.fileName());
 }
 
 void TextFileEditWidget::setText(const QString& text)
@@ -61,9 +61,35 @@ QString TextFileEditWidget::getText() const
     return ui->textEdit->toPlainText();
 }
 
+QString TextFileEditWidget::getFilePath() const
+{
+    return fileInfo.filePath();
+}
+
 QTextEdit* TextFileEditWidget::textEdit() const
 {
     return ui->textEdit;
+}
+
+bool TextFileEditWidget::isUnsaved() const
+{
+    return !isSaved;
+}
+
+bool TextFileEditWidget::isWrapEnabled() const
+{
+    return wrapEnabled;
+}
+
+void TextFileEditWidget::setLineWrap(bool wrap)
+{
+    if (wrap) {
+        ui->textEdit->setLineWrapMode(QTextEdit::WidgetWidth);
+        wrapEnabled = true;
+    } else {
+        ui->textEdit->setLineWrapMode(QTextEdit::NoWrap);
+        wrapEnabled = false;
+    }
 }
 
 void TextFileEditWidget::onTextChanged()

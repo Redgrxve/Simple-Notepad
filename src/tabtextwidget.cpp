@@ -75,12 +75,17 @@ void TabTextWidget::saveTab(int tabIndex, const QString &filePath)
     unsavedTabsIndexes.remove(tabIndex);
 }
 
-void TabTextWidget::saveAllUnsavedTabs()
+void TabTextWidget::saveAllUnsavedTabs(bool enableSaveDialog)
 {
     while (unsavedTabsIndexes.size() != 0) {
         int unsavedTabIndex = unsavedTabsIndexes.last();
         setCurrentIndex(unsavedTabIndex);
-        execSaveDialog(unsavedTabIndex);
+
+        if (enableSaveDialog) {
+            execSaveDialog(unsavedTabIndex);
+        } else {
+            onSaveDialogAccepted(unsavedTabIndex);
+        }
     }
 }
 
@@ -167,7 +172,14 @@ void TabTextWidget::onCloseTabClicked(const TabButtonWidget* sender)
 
 void TabTextWidget::onSaveDialogAccepted(int tabIndex)
 {
-    QString filePath = Utils::getSaveFileName(this);
+    QString filePath = getTextEdit(tabIndex)->getFilePath();
+    if (!filePath.isEmpty()) {
+        saveTab(tabIndex, filePath);
+        removeTab(tabIndex);
+        return;
+    }
+
+    filePath = Utils::getSaveFileName(this);
     if (filePath.isEmpty()) return;
 
     saveTab(tabIndex, filePath);

@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onCurrentTabChanged(int)));
     connect(ui->tabWidget, SIGNAL(tabAdded(int)), this, SLOT(onTabAdded()));
     connect(ui->tabWidget, SIGNAL(tabClosed(int)), this, SLOT(onTabClosed()));
 }
@@ -24,7 +25,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *closeEvent)
 {
-    ui->tabWidget->saveAllUnsavedTabs();
+    ui->tabWidget->saveAllUnsavedTabs(true);
     QMainWindow::closeEvent(closeEvent);
 }
 
@@ -61,6 +62,24 @@ void MainWindow::onSaveAsTriggered()
 
     ui->tabWidget->saveCurrentTab(filePath);
     ui->statusbar->showMessage(tr("The file saved: ") + filePath);
+}
+
+void MainWindow::onSaveAllTriggered()
+{
+    ui->tabWidget->saveAllUnsavedTabs(false);
+}
+
+void MainWindow::onWordWrapToggled(bool wrap)
+{
+    ui->tabWidget->getCurrentTextEdit()->setLineWrap(wrap);
+}
+
+void MainWindow::onCurrentTabChanged(int index)
+{
+    auto textEdit = ui->tabWidget->getTextEdit(index);
+    if (!textEdit) return;
+
+    ui->actionWord_wrap->setChecked(textEdit->isWrapEnabled());
 }
 
 void MainWindow::onTabAdded()
